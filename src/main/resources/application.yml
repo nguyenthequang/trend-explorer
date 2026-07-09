@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: trend-explorer
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/trend}
+    username: ${DATABASE_USERNAME:}
+    password: ${DATABASE_PASSWORD:}
+  flyway:
+    enabled: true
+
+server:
+  port: ${PORT:8080}
