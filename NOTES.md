@@ -1,5 +1,26 @@
 # NOTES — factual changelog
 
+## Phase 2 — windows + Hacker News (2026-07-09)
+
+- Ported `CoreTests.windows()` + `.keywords()` to JUnit 5 (`WindowsTest` 7,
+  `KeywordsTest` 5) — verbatim, test-only commit; core classes untouched.
+  Scoring/DeltaMath assertions stay in starter `CoreTests` until Phase 4.
+- Adapters package: `SourceAdapter` interface, `RawPost` + `WindowResult`
+  records, shared `AdapterException`.
+- `HnAdapter` (Algolia, no auth, coverage always "full"): `nbHits` counts via
+  `search_by_date&hitsPerPage=0`; 60 posts via `search`, sorted by score desc
+  (null scores last); 17-day daily series; half-open `numericFilters` mirrors
+  Windows; 429 backoff with jitter. Base URL injectable for WireMock.
+- Jackson tree model for parsing (irregular story/comment shapes); field
+  fallbacks title→story_title, story_text→comment_text, url→HN item URL.
+- WireMock deps: `org.wiremock:wiremock-standalone:3.13.1` (shaded, avoids
+  Jetty clash). `HnAdapterTest` = 9 tests over recorded fixtures in
+  `src/test/resources/fixtures/hn/`. `./mvnw verify` green (25 tests, offline).
+- `scripts/SmokeHn.java` (manual live check) under a `smoke` Maven profile
+  (build-helper adds `scripts/` as source, exec-maven-plugin runs it) — not in
+  the normal build or CI. Live run for "python": now=252 / week_ago=340 /
+  two_weeks_ago=201, all coverage=full, believable 17-day series.
+
 ## Phase 0b — accounts / remote (2026-07-09)
 
 - Remote `origin` = https://github.com/nguyenthequang/trend-explorer; pushed
