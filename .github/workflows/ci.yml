@@ -8,13 +8,17 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    env:
+      # Mapped to env because the `secrets` context is not allowed inside
+      # `if:` expressions — testing env.* is GitHub's documented workaround.
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     steps:
       - uses: actions/checkout@v4
 
       # Authenticated pulls dodge Docker Hub's anonymous rate limits
       # (Testcontainers pulls postgres:16). Optional until the secrets exist.
       - name: Log in to Docker Hub
-        if: ${{ github.event_name == 'push' && secrets.DOCKERHUB_USERNAME != '' }}
+        if: ${{ github.event_name == 'push' && env.DOCKERHUB_USERNAME != '' }}
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
