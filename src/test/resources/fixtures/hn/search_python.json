@@ -1,0 +1,14 @@
+{
+  "hits": [
+    {"objectID": "40001", "author": "alice", "title": "Python 3.13 released",
+     "url": "https://example.com/py313", "points": 250, "created_at_i": 1751979600,
+     "num_comments": 88},
+    {"objectID": "40002", "author": "bob", "title": "Why I love Python",
+     "url": null, "points": 90, "created_at_i": 1751979000,
+     "story_text": "A short blog about python and its ecosystem"},
+    {"objectID": "40003", "author": "carol", "title": null,
+     "story_title": "Python threading", "url": null, "points": null,
+     "created_at_i": 1751978000, "comment_text": "Great point about the GIL"}
+  ],
+  "nbHits": 3, "page": 0, "nbPages": 1, "hitsPerPage": 60
+}

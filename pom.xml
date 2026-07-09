@@ -72,6 +72,14 @@
 			<artifactId>postgresql</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<!-- Shaded jar: its Jetty/Jackson are relocated, so they can't
+			     clash with Spring Boot's servlet stack. -->
+			<groupId>org.wiremock</groupId>
+			<artifactId>wiremock-standalone</artifactId>
+			<version>3.13.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -92,5 +100,45 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<!-- Manual live smoke checks (scripts/*.java). Not compiled by the
+		     normal build or CI, so they never make network calls in tests.
+		     Run e.g.:
+		       ./mvnw -q -Psmoke compile exec:java \
+		         -Dexec.mainClass=com.quang.trend.scripts.SmokeHn -Dexec.args=python
+		-->
+		<profile>
+			<id>smoke</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>3.6.0</version>
+						<executions>
+							<execution>
+								<id>add-scripts-source</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>add-source</goal>
+								</goals>
+								<configuration>
+									<sources>
+										<source>scripts</source>
+									</sources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.5.0</version>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
